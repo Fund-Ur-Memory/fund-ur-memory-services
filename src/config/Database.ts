@@ -34,24 +34,14 @@ export const initializeDatabase = async () => {
         vault_title VARCHAR(255) NOT NULL,
         commitment_message TEXT NOT NULL,
         owner_address VARCHAR(42) NOT NULL,
-        token_address VARCHAR(42) NOT NULL,
-        amount VARCHAR(78) NOT NULL,
-        unlock_time BIGINT,
-        target_price VARCHAR(78),
-        condition_type VARCHAR(20) NOT NULL,
-        status VARCHAR(20) NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        metadata TEXT,
         tx_hash VARCHAR(66),
-        block_number BIGINT,
-        emergency_initiated_at BIGINT
+        metadata TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
 
       CREATE INDEX IF NOT EXISTS idx_owner_address ON vaults(owner_address);
       CREATE INDEX IF NOT EXISTS idx_vault_id ON vaults(vault_id);
-      CREATE INDEX IF NOT EXISTS idx_status ON vaults(status);
-      CREATE INDEX IF NOT EXISTS idx_token_address ON vaults(token_address);
     `)
     console.log('Database tables initialized')
   } catch (error) {

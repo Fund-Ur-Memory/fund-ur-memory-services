@@ -3,7 +3,7 @@ import { zValidator } from '@hono/zod-validator'
 import { VaultService } from '../services/vault.service'
 import { 
   createVaultSchema, 
-  updateVaultStatusSchema, 
+  updateVaultSchema, 
   paginationSchema,
   vaultIdSchema,
   ownerAddressSchema
@@ -70,17 +70,29 @@ vaultRoutes.get('/user/:address',
   }
 )
 
-vaultRoutes.put('/:id/status', 
+vaultRoutes.put('/:id', 
   zValidator('param', vaultIdSchema),
-  zValidator('json', updateVaultStatusSchema),
+  zValidator('json', updateVaultSchema),
   async (c) => {
     const { id } = c.req.valid('param')
     const updateData = c.req.valid('json')
-    const vault = await VaultService.updateVaultStatus(id, updateData)
+    const vault = await VaultService.updateVault(id, updateData)
     return c.json({
       success: true,
       data: vault,
-      message: 'Vault status updated successfully'
+      message: 'Vault updated successfully'
+    })
+  }
+)
+
+vaultRoutes.delete('/:id', 
+  zValidator('param', vaultIdSchema),
+  async (c) => {
+    const { id } = c.req.valid('param')
+    await VaultService.deleteVault(id)
+    return c.json({
+      success: true,
+      message: 'Vault deleted successfully'
     })
   }
 )

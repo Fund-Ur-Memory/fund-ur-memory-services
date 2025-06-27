@@ -1,5 +1,5 @@
 import { VaultModel } from '../models/vaults.model'
-import { CreateVaultDto, UpdateVaultStatusDto, Vault, VaultStats } from '../types/vault.types'
+import { CreateVaultDto, UpdateVaultDto, Vault } from '../types/vault.types'
 import { HTTPException } from 'hono/http-exception'
 
 export class VaultService {
@@ -67,23 +67,36 @@ export class VaultService {
     }
   }
 
-  static async updateVaultStatus(
+  static async updateVault(
     vaultId: number, 
-    updateData: UpdateVaultStatusDto
+    updateData: UpdateVaultDto
   ): Promise<Vault> {
     try {
-      const vault = await VaultModel.updateStatus(vaultId, updateData)
+      const vault = await VaultModel.update(vaultId, updateData)
       if (!vault) {
         throw new HTTPException(404, { message: 'Vault not found' })
       }
       return vault
     } catch (error) {
       if (error instanceof HTTPException) throw error
-      throw new HTTPException(500, { message: 'Failed to update vault status' })
+      throw new HTTPException(500, { message: 'Failed to update vault' })
     }
   }
 
-  static async getVaultStats(): Promise<VaultStats> {
+  static async deleteVault(vaultId: number): Promise<boolean> {
+    try {
+      const deleted = await VaultModel.delete(vaultId)
+      if (!deleted) {
+        throw new HTTPException(404, { message: 'Vault not found' })
+      }
+      return deleted
+    } catch (error) {
+      if (error instanceof HTTPException) throw error
+      throw new HTTPException(500, { message: 'Failed to delete vault' })
+    }
+  }
+
+  static async getVaultStats(): Promise<{total_vaults: number}> {
     try {
       const stats = await VaultModel.getStats()
       return stats

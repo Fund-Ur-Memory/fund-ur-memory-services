@@ -2,7 +2,7 @@
 
 ## Base URL
 ```
-http://localhost:3000/api
+http://localhost:3002/api
 ```
 
 ## Endpoints
@@ -16,14 +16,11 @@ Creates a new vault record in the indexer.
 ```json
 {
   "vault_id": 1,
+  "vault_title": "My First Vault",
+  "commitment_message": "I am committing to hold this vault for the long term",
   "owner_address": "0x742d35Cc6634C0532925a3b844Bc9e7595f6E123",
-  "token_address": "0x5274A2153cF842E3bD1D4996E01d567750d0e739",
-  "amount": "1000000000000000000",
-  "unlock_time": 1735257600,
-  "target_price": "2000000000",
-  "condition_type": "TIME_AND_PRICE",
   "metadata": {
-    "aiAgentAdvice": "Based on market analysis, locking until Q4 2024 with a $2000 price target provides optimal risk-reward ratio.",
+    "aiAgentAdvice": "Based on market analysis, this is a good time to lock.",
     "aiAgentInsights": {
       "marketTrend": "bullish",
       "volatility": "medium",
@@ -31,8 +28,7 @@ Creates a new vault record in the indexer.
     },
     "userNote": "Long-term investment strategy"
   },
-  "tx_hash": "0x123abc...",
-  "block_number": 1234567
+  "tx_hash": "0x123abc..."
 }
 ```
 
@@ -43,18 +39,13 @@ Creates a new vault record in the indexer.
   "data": {
     "id": 1,
     "vault_id": 1,
+    "vault_title": "My First Vault",
+    "commitment_message": "I am committing to hold this vault for the long term",
     "owner_address": "0x742d35cc6634c0532925a3b844bc9e7595f6e123",
-    "token_address": "0x5274a2153cf842e3bd1d4996e01d567750d0e739",
-    "amount": "1000000000000000000",
-    "unlock_time": 1735257600,
-    "target_price": "2000000000",
-    "condition_type": "TIME_AND_PRICE",
-    "status": "ACTIVE",
     "created_at": "2024-01-15T10:30:00Z",
     "updated_at": "2024-01-15T10:30:00Z",
     "metadata": "{\"aiAgentAdvice\":\"Based on market analysis...\"}",
-    "tx_hash": "0x123abc...",
-    "block_number": 1234567
+    "tx_hash": "0x123abc..."
   },
   "message": "Vault created successfully"
 }
@@ -77,18 +68,13 @@ Retrieves all vaults with pagination.
     {
       "id": 1,
       "vault_id": 1,
+      "vault_title": "My First Vault",
+      "commitment_message": "I am committing to hold this vault for the long term",
       "owner_address": "0x742d35cc6634c0532925a3b844bc9e7595f6e123",
-      "token_address": "0x5274a2153cf842e3bd1d4996e01d567750d0e739",
-      "amount": "1000000000000000000",
-      "unlock_time": 1735257600,
-      "target_price": "2000000000",
-      "condition_type": "TIME_AND_PRICE",
-      "status": "ACTIVE",
       "created_at": "2024-01-15T10:30:00Z",
       "updated_at": "2024-01-15T10:30:00Z",
       "metadata": "{\"aiAgentAdvice\":\"Based on market analysis...\"}",
-      "tx_hash": "0x123abc...",
-      "block_number": 1234567
+      "tx_hash": "0x123abc..."
     }
   ],
   "pagination": {
@@ -115,18 +101,13 @@ Retrieves a specific vault by its vault_id.
   "data": {
     "id": 1,
     "vault_id": 1,
+    "vault_title": "My First Vault",
+    "commitment_message": "I am committing to hold this vault for the long term",
     "owner_address": "0x742d35cc6634c0532925a3b844bc9e7595f6e123",
-    "token_address": "0x5274a2153cf842e3bd1d4996e01d567750d0e739",
-    "amount": "1000000000000000000",
-    "unlock_time": 1735257600,
-    "target_price": "2000000000",
-    "condition_type": "TIME_AND_PRICE",
-    "status": "ACTIVE",
     "created_at": "2024-01-15T10:30:00Z",
     "updated_at": "2024-01-15T10:30:00Z",
     "metadata": "{\"aiAgentAdvice\":\"Based on market analysis...\"}",
-    "tx_hash": "0x123abc...",
-    "block_number": 1234567
+    "tx_hash": "0x123abc..."
   }
 }
 ```
@@ -147,28 +128,23 @@ Retrieves all vaults owned by a specific address.
     {
       "id": 1,
       "vault_id": 1,
+      "vault_title": "My First Vault",
+      "commitment_message": "I am committing to hold this vault for the long term",
       "owner_address": "0x742d35cc6634c0532925a3b844bc9e7595f6e123",
-      "token_address": "0x5274a2153cf842e3bd1d4996e01d567750d0e739",
-      "amount": "1000000000000000000",
-      "unlock_time": 1735257600,
-      "target_price": "2000000000",
-      "condition_type": "TIME_AND_PRICE",
-      "status": "ACTIVE",
       "created_at": "2024-01-15T10:30:00Z",
       "updated_at": "2024-01-15T10:30:00Z",
       "metadata": "{\"aiAgentAdvice\":\"Based on market analysis...\"}",
-      "tx_hash": "0x123abc...",
-      "block_number": 1234567
+      "tx_hash": "0x123abc..."
     }
   ],
   "count": 1
 }
 ```
 
-### 5. Update Vault Status
-**PUT** `/vaults/:id/status`
+### 5. Update Vault
+**PUT** `/vaults/:id`
 
-Updates the status of a vault (e.g., when unlocked, withdrawn, or emergency withdrawn).
+Updates a vault's information.
 
 **URL Parameters:**
 - `id`: The vault_id
@@ -176,8 +152,13 @@ Updates the status of a vault (e.g., when unlocked, withdrawn, or emergency with
 **Request Body:**
 ```json
 {
-  "status": "UNLOCKED",
-  "emergency_initiated_at": 1735257600
+  "vault_title": "Updated Vault Title",
+  "commitment_message": "Updated commitment message",
+  "metadata": {
+    "aiAgentAdvice": "Updated advice based on new market conditions",
+    "userNote": "Updated notes"
+  },
+  "tx_hash": "0x456def..."
 }
 ```
 
@@ -188,25 +169,35 @@ Updates the status of a vault (e.g., when unlocked, withdrawn, or emergency with
   "data": {
     "id": 1,
     "vault_id": 1,
+    "vault_title": "Updated Vault Title",
+    "commitment_message": "Updated commitment message",
     "owner_address": "0x742d35cc6634c0532925a3b844bc9e7595f6e123",
-    "token_address": "0x5274a2153cf842e3bd1d4996e01d567750d0e739",
-    "amount": "1000000000000000000",
-    "unlock_time": 1735257600,
-    "target_price": "2000000000",
-    "condition_type": "TIME_AND_PRICE",
-    "status": "UNLOCKED",
     "created_at": "2024-01-15T10:30:00Z",
     "updated_at": "2024-01-15T11:30:00Z",
-    "metadata": "{\"aiAgentAdvice\":\"Based on market analysis...\"}",
-    "tx_hash": "0x123abc...",
-    "block_number": 1234567,
-    "emergency_initiated_at": null
+    "metadata": "{\"aiAgentAdvice\":\"Updated advice based on new market conditions\"}",
+    "tx_hash": "0x456def..."
   },
-  "message": "Vault status updated successfully"
+  "message": "Vault updated successfully"
 }
 ```
 
-### 6. Get Vault Statistics
+### 6. Delete Vault
+**DELETE** `/vaults/:id`
+
+Deletes a vault from the indexer.
+
+**URL Parameters:**
+- `id`: The vault_id
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Vault deleted successfully"
+}
+```
+
+### 7. Get Vault Statistics
 **GET** `/vaults/stats`
 
 Retrieves overall statistics about all vaults.
@@ -216,21 +207,7 @@ Retrieves overall statistics about all vaults.
 {
   "success": true,
   "data": {
-    "total_vaults": 150,
-    "active_vaults": 75,
-    "total_value_locked": "75000000000000000000000",
-    "vaults_by_status": {
-      "ACTIVE": 75,
-      "UNLOCKED": 30,
-      "WITHDRAWN": 40,
-      "EMERGENCY_WITHDRAWN": 5
-    },
-    "vaults_by_condition": {
-      "TIME": 50,
-      "PRICE": 30,
-      "TIME_AND_PRICE": 40,
-      "TIME_OR_PRICE": 30
-    }
+    "total_vaults": 150
   }
 }
 ```
@@ -255,16 +232,21 @@ Retrieves overall statistics about all vaults.
 }
 ```
 
-## Condition Types
+## Required Fields
 
-- `TIME`: Vault unlocks at specific time
-- `PRICE`: Vault unlocks at target price
-- `TIME_AND_PRICE`: Both conditions must be met
-- `TIME_OR_PRICE`: Either condition triggers unlock
+### Create Vault
+- `vault_id` (number): Unique identifier for the vault
+- `vault_title` (string): Title/name of the vault
+- `commitment_message` (string): User's commitment message
+- `owner_address` (string): Ethereum address of the vault owner
 
-## Vault Statuses
+### Optional Fields
+- `metadata` (object/string): Additional data including AI agent insights
+- `tx_hash` (string): Transaction hash from blockchain
 
-- `ACTIVE`: Vault is locked and active
-- `UNLOCKED`: Conditions met, ready for withdrawal
-- `WITHDRAWN`: Funds have been withdrawn
-- `EMERGENCY_WITHDRAWN`: Emergency withdrawal executed (with penalty)
+### Update Vault
+All fields are optional for updates:
+- `vault_title` (string)
+- `commitment_message` (string)
+- `metadata` (object/string)
+- `tx_hash` (string)

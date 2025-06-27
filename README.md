@@ -68,7 +68,7 @@ bun run start
 The server will:
 1. Connect to PostgreSQL
 2. Create the necessary tables if they don't exist
-3. Start the HTTP server on port 3000 (or the port specified in .env)
+3. Start the HTTP server on port 3002 (or the port specified in .env)
 
 ## Database Schema
 
@@ -78,19 +78,13 @@ The application will automatically create the following table:
 CREATE TABLE vaults (
   id SERIAL PRIMARY KEY,
   vault_id INTEGER UNIQUE NOT NULL,
+  vault_title VARCHAR(255) NOT NULL,
+  commitment_message TEXT NOT NULL,
   owner_address VARCHAR(42) NOT NULL,
-  token_address VARCHAR(42) NOT NULL,
-  amount VARCHAR(78) NOT NULL,
-  unlock_time BIGINT,
-  target_price VARCHAR(78),
-  condition_type VARCHAR(20) NOT NULL,
-  status VARCHAR(20) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   metadata TEXT,
-  tx_hash VARCHAR(66),
-  block_number BIGINT,
-  emergency_initiated_at BIGINT
+  tx_hash VARCHAR(66)
 );
 ```
 
@@ -102,13 +96,13 @@ fum-services/
 │   ├── app.ts              # Main application setup
 │   ├── index.ts            # Server entry point
 │   ├── config/
-│   │   ├── database.ts     # Database connection & initialization
+│   │   ├── Database.ts     # Database connection & initialization
 │   │   ├── Contracts.ts    # Smart contract configuration
 │   │   └── ViemClient.ts   # Blockchain client
 │   ├── types/
 │   │   └── vault.types.ts  # TypeScript interfaces
 │   ├── models/
-│   │   └── vault.model.ts  # Database operations
+│   │   └── vaults.model.ts # Database operations
 │   ├── services/
 │   │   └── vault.service.ts # Business logic
 │   ├── routes/
@@ -126,36 +120,59 @@ Once the server is running, you can test it:
 
 **Health Check:**
 ```bash
-curl http://localhost:3000/
+curl http://localhost:3002/
 ```
 
 **Create a Vault:**
 ```bash
-curl -X POST http://localhost:3000/api/vaults \
+curl -X POST http://localhost:3002/api/vaults \
   -H "Content-Type: application/json" \
   -d '{
     "vault_id": 1,
+    "vault_title": "My First Vault",
+    "commitment_message": "I am committing to hold this vault for the long term",
     "owner_address": "0x742d35Cc6634C0532925a3b844Bc9e7595f6E123",
-    "token_address": "0x5274A2153cF842E3bD1D4996E01d567750d0e739",
-    "amount": "1000000000000000000",
-    "unlock_time": 1735257600,
-    "target_price": "2000000000",
-    "condition_type": "TIME_AND_PRICE",
     "metadata": {
       "aiAgentAdvice": "Based on market analysis, this is a good time to lock.",
       "userNote": "Long-term hold"
-    }
+    },
+    "tx_hash": "0x123abc..."
   }'
 ```
 
 **Get All Vaults:**
 ```bash
-curl http://localhost:3000/api/vaults
+curl http://localhost:3002/api/vaults
+```
+
+**Get Vault by ID:**
+```bash
+curl http://localhost:3002/api/vaults/1
+```
+
+**Get Vaults by Owner:**
+```bash
+curl http://localhost:3002/api/vaults/user/0x742d35Cc6634C0532925a3b844Bc9e7595f6E123
+```
+
+**Update a Vault:**
+```bash
+curl -X PUT http://localhost:3002/api/vaults/1 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "vault_title": "Updated Vault Title",
+    "commitment_message": "Updated commitment message"
+  }'
+```
+
+**Delete a Vault:**
+```bash
+curl -X DELETE http://localhost:3002/api/vaults/1
 ```
 
 **Get Vault Statistics:**
 ```bash
-curl http://localhost:3000/api/vaults/stats
+curl http://localhost:3002/api/vaults/stats
 ```
 
 ## Features
@@ -167,14 +184,14 @@ curl http://localhost:3000/api/vaults/stats
 - ✅ Pagination support
 - ✅ Metadata storage for AI agent insights
 - ✅ Automatic timestamp tracking (created_at, updated_at)
-- ✅ Support for all vault condition types
+- ✅ CRUD operations for vaults
 - ✅ Vault statistics endpoint
 - ✅ Case-insensitive address storage
 
 ## Next Steps
 
 1. **Frontend Integration:** Update your frontend to call these API endpoints when creating vaults
-2. **Blockchain Event Listener:** Consider adding a service to listen to blockchain events and automatically update vault statuses
-3. **Background Jobs:** Add a cron job to periodically check and update vault statuses based on time/price conditions
+2. **Blockchain Event Listener:** Consider adding a service to listen to blockchain events and automatically update vault data
+3. **Background Jobs:** Add a cron job to periodically check and update vault information
 4. **Monitoring:** Add logging and monitoring for production deployment
 5. **API Rate Limiting:** Consider adding rate limiting for production use
