@@ -31,6 +31,8 @@ export const initializeDatabase = async () => {
       CREATE TABLE IF NOT EXISTS vaults (
         id SERIAL PRIMARY KEY,
         vault_id INTEGER UNIQUE NOT NULL,
+        vault_title VARCHAR(255) NOT NULL,
+        commitment_message TEXT NOT NULL,
         owner_address VARCHAR(42) NOT NULL,
         token_address VARCHAR(42) NOT NULL,
         amount VARCHAR(78) NOT NULL,
