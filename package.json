@@ -1,10 +1,10 @@
 {
-  "name": "fum-services",
+  "name": "cipher-services",
   "scripts": {
     "dev": "bun run --hot src/index.ts",
     "start": "bun run src/index.ts",
-    "db:create": "createdb fum_vault_db",
-    "db:drop": "dropdb fum_vault_db",
+    "db:create": "createdb cipher_vault_db",
+    "db:drop": "dropdb cipher_vault_db",
     "db:migrate": "bun run src/migrations/migrate.ts"
   },
   "dependencies": {

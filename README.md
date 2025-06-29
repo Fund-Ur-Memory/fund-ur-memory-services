@@ -1,4 +1,4 @@
-# FUM Vault Indexer Setup Guide
+# Cipher Vault Services Setup Guide
 
 ## Prerequisites
 
@@ -22,12 +22,12 @@ bun add pg @types/pg
 
 Create a new database:
 ```bash
-createdb fum_vault_db
+createdb cipher_vault_db
 ```
 
 Or using psql:
 ```sql
-CREATE DATABASE fum_vault_db;
+CREATE DATABASE cipher_vault_db;
 ```
 
 4. **Configure Environment Variables:**
@@ -45,7 +45,7 @@ PORT=3002
 # Database Configuration
 DB_HOST=localhost
 DB_PORT=5432
-DB_NAME=fum_vault_db
+DB_NAME=cipher_vault_db
 DB_USER=postgres
 DB_PASSWORD=your_password_here
 
@@ -91,7 +91,7 @@ CREATE TABLE vaults (
 ## Project Structure
 
 ```
-fum-services/
+cipher-services/
 ├── src/
 │   ├── app.ts              # Main application setup
 │   ├── index.ts            # Server entry point
